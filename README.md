@@ -3,6 +3,7 @@
 A responsive and interactive calculator built using HTML, CSS, and JavaScript. Designed with a modern dark theme and intuitive user interface, this project performs accurate mathematical calculations while providing a smooth user experience across desktop and mobile devices.
 
 ✨ Features
+
 ➕ Basic arithmetic operations (Addition, Subtraction, Multiplication, Division)
 🖥️ Responsive design for desktop and mobile devices
 🎨 Modern black-themed user interface
@@ -10,6 +11,8 @@ A responsive and interactive calculator built using HTML, CSS, and JavaScript. D
 ⌨️ Keyboard-friendly interaction (if implemented)
 🧹 Clear (AC) and Delete (DEL) functionality
 📱 Clean and user-friendly layout
+
+
 🛠️ Technologies Used
 HTML5
 CSS3
