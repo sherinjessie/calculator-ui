@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumen — Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient glow background -->
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient__blob ambient__blob--a"></span>
+    <span class="ambient__blob ambient__blob--b"></span>
+    <span class="ambient__grain"></span>
+  </div>
+
+  <main class="stage">
+    <!-- Top toolbar: brand + utility toggles -->
+    <header class="toolbar">
+      <div class="brand">
+        <span class="brand__mark">S</span>
+        <span class="brand__name">Lumen</span>
+      </div>
+      <div class="toolbar__actions">
+        <button class="iconbtn" id="soundToggle" type="button" aria-pressed="true" title="Toggle sound">
+          <svg id="soundIconOn" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M19 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.55"/></svg>
+          <svg id="soundIconOff" viewBox="0 0 24 24" fill="none" hidden><path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <button class="iconbtn" id="themeToggle" type="button" title="Toggle theme">
+          <svg id="themeIconDark" viewBox="0 0 24 24" fill="none"><path d="M20.4 14.7A8.5 8.5 0 1 1 9.3 3.6a7 7 0 0 0 11.1 11.1Z" fill="currentColor"/></svg>
+          <svg id="themeIconLight" viewBox="0 0 24 24" fill="none" hidden><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></g></svg>
+        </button>
+        <button class="iconbtn" id="historyToggle" type="button" aria-expanded="false" title="Calculation history">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.6 5.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 8v4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Calculator -->
+      <section class="calculator" id="calculator" aria-label="Calculator">
+        <div class="calculator__screen">
+          <div class="screen__row">
+            <p class="screen__history" id="expression" aria-live="off">&nbsp;</p>
+            <button class="copybtn" id="copyBtn" type="button" title="Copy result">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.6"/></svg>
+            </button>
+          </div>
+          <p class="screen__result" id="result" aria-live="polite">0</p>
+        </div>
+
+        <div class="calculator__pad">
+          <button class="key key--func" data-action="clear">C</button>
+          <button class="key key--func" data-action="negate">+/-</button>
+          <button class="key key--func" data-action="percent">%</button>
+          <button class="key key--op" data-action="op" data-op="÷">÷</button>
+
+          <button class="key key--num" data-digit="7">7</button>
+          <button class="key key--num" data-digit="8">8</button>
+          <button class="key key--num" data-digit="9">9</button>
+          <button class="key key--op" data-action="op" data-op="×">×</button>
+
+          <button class="key key--num" data-digit="4">4</button>
+          <button class="key key--num" data-digit="5">5</button>
+          <button class="key key--num" data-digit="6">6</button>
+          <button class="key key--op" data-action="op" data-op="−">−</button>
+
+          <button class="key key--num" data-digit="1">1</button>
+          <button class="key key--num" data-digit="2">2</button>
+          <button class="key key--num" data-digit="3">3</button>
+          <button class="key key--op" data-action="op" data-op="+">+</button>
+
+          <button class="key key--num key--zero" data-digit="0">0</button>
+          <button class="key key--num" data-action="decimal">.</button>
+          <button class="key key--op key--equals" data-action="equals">=</button>
+        </div>
+      </section>
+
+      <!-- History panel -->
+      <aside class="history" id="historyPanel" aria-label="Calculation history">
+        <div class="history__head">
+          <h2>History</h2>
+          <button class="linkbtn" id="clearHistory" type="button">Clear</button>
+        </div>
+        <ul class="history__list" id="historyList">
+          <li class="history__empty" id="historyEmpty">No calculations yet</li>
+        </ul>
+      </aside>
+    </div>
+
+    <p class="hint">Keyboard ready — numbers, <kbd>+</kbd> <kbd>−</kbd> <kbd>×</kbd> <kbd>÷</kbd>, <kbd>Enter</kbd> to solve, <kbd>Esc</kbd> to clear</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
