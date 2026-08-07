@@ -21,7 +21,7 @@
   --shadow-color: 0deg 0% 0%;
 
   /* Layout */
-  --calc-width: 360px;
+  --calc-width: min(360px, 100vw - 32px);
   --radius-xl: 35px;
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -76,6 +76,9 @@ body {
   color: var(--text);
   overflow-x: hidden;
   transition: background 0.5s var(--ease-out), color 0.5s var(--ease-out);
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 button {
@@ -133,13 +136,27 @@ ul {
 }
 
 @keyframes drift-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.15); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(60px, 40px) scale(1.15);
+  }
 }
 
 @keyframes drift-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-50px, -30px) scale(1.1); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-50px, -30px) scale(1.1);
+  }
 }
 
 .ambient__grain {
@@ -156,19 +173,29 @@ ul {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 32px 20px 40px;
-  gap: 22px;
+  padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  gap: clamp(14px, 4vh, 22px);
   opacity: 0;
   animation: page-in 0.9s var(--ease-out) forwards;
 }
 
 @keyframes page-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toolbar {
@@ -228,10 +255,12 @@ ul {
   height: 18px;
 }
 
-.iconbtn:hover {
-  color: var(--accent);
-  border-color: rgba(255, 149, 0, 0.35);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .iconbtn:hover {
+    color: var(--accent);
+    border-color: rgba(255, 149, 0, 0.35);
+    transform: translateY(-2px);
+  }
 }
 
 .iconbtn[aria-expanded="true"],
@@ -239,11 +268,7 @@ ul {
   color: var(--accent);
 }
 
-.layout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
+/* AFTER (only inside the max-width:700px media query, shown in #7 below) */
 
 /* ==========================================================================
    Calculator body
@@ -264,8 +289,15 @@ ul {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .calculator__screen {
@@ -340,9 +372,17 @@ ul {
 }
 
 @keyframes pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .screen__result {
@@ -362,8 +402,15 @@ ul {
 }
 
 @keyframes result-in {
-  from { opacity: 0.4; transform: translateY(4px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0.4;
+    transform: translateY(4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ==========================================================================
@@ -580,8 +627,15 @@ ul {
 }
 
 @keyframes item-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .history__item:hover {
@@ -640,6 +694,7 @@ kbd {
   .layout {
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
 
   .history {
@@ -651,33 +706,102 @@ kbd {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   :root {
     --calc-width: 100%;
-    --radius-xl: 28px;
+    --radius-xl: 24px;
+    --radius-lg: 18px;
   }
 
   .stage {
-    padding: 20px 14px 28px;
+    justify-content: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top));
+    gap: 16px;
+  }
+
+  .toolbar,
+  .layout {
+    max-width: 480px;
+  }
+
+  .calculator {
+    width: 100%;
+    max-width: 480px;
+    padding: 18px;
+    animation: none;
+  }
+
+  .calculator__screen {
+    min-height: clamp(90px, 16vh, 118px);
+    padding: 18px 16px 14px;
+  }
+
+  .calculator__pad {
+    gap: 10px;
   }
 
   .key {
-    height: 60px;
-    font-size: 20px;
+    height: clamp(52px, 15vw, 68px);
+    font-size: clamp(18px, 5.5vw, 22px);
+    border-radius: var(--radius-md);
+  }
+
+  .key--equals {
+    font-size: clamp(20px, 6vw, 24px);
   }
 
   .screen__result {
-    font-size: 36px;
+    font-size: clamp(30px, 9vw, 42px);
+  }
+
+  .hint {
+    display: none;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-height: 700px) and (max-width: 480px) {
+  .toolbar {
+    display: none;
+  }
+
+  .calculator__screen {
+    min-height: 72px;
+    margin-bottom: 12px;
+    padding: 14px 14px 10px;
+  }
+
   .key {
-    height: 54px;
-    font-size: 18px;
+    height: clamp(44px, 11vh, 60px);
+  }
+
+  .calculator__pad {
+    gap: 8px;
   }
 }
 
+@media (max-height: 480px) and (orientation: landscape) {
+  .stage {
+    justify-content: center;
+    padding: 10px max(16px, env(safe-area-inset-left)) 10px max(16px, env(safe-area-inset-right));
+  }
+
+  .calculator {
+    width: min(520px, 92vw);
+  }
+
+  .calculator__pad {
+    grid-template-rows: repeat(5, 1fr);
+  }
+
+  .key {
+    height: clamp(38px, 9vh, 52px);
+    font-size: 16px;
+  }
+
+  .screen__result {
+    font-size: clamp(26px, 6vh, 36px);
+  }
+}
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {
